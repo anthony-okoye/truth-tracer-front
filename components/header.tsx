@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { CheckCircle, Menu, X } from "lucide-react";
-import { ThemeToggle } from "./theme-toggle";
-import { ConversationHistory } from "./conversation-history";
 import { useState } from "react";
 import { Button } from "./ui/button";
+import { ThemeToggle } from "./theme-toggle";
+import { CheckCircle, Menu, X } from "lucide-react";
+import { ConversationHistory } from "./recent-queries";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,7 +16,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container max-w-6xl mx-auto px-4 py-3">
+      <div className="container max-w-7xl mx-auto px-4 py-3">
         <div className="flex items-center justify-between h-14">
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">

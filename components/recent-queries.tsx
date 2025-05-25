@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Calendar, HistoryIcon, Search, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -11,73 +11,58 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-
-type HistoryItem = {
-  id: string
-  query: string
-  date: Date
-  result: string
-}
-
-// Mock data
-const mockHistory: HistoryItem[] = [
-  {
-    id: "1",
-    query: "Is the Earth flat?",
-    date: new Date("2023-11-15T12:30:00"),
-    result: "False",
-  },
-  {
-    id: "2",
-    query: "Was Albert Einstein a physicist?",
-    date: new Date("2023-11-14T10:15:00"),
-    result: "True",
-  },
-  {
-    id: "3",
-    query: "Do vaccines cause autism?",
-    date: new Date("2023-11-12T14:45:00"),
-    result: "False",
-  },
-  {
-    id: "4",
-    query: "Is coffee the second most traded commodity after oil?",
-    date: new Date("2023-11-10T09:20:00"),
-    result: "Misleading",
-  },
-]
+import { useRouter } from "next/navigation"
+import { getFactResults, removeFactResultFromHistory, clearHistory } from "@/lib/utils"
+import { IFactResult } from "@/types"
 
 export function ConversationHistory() {
-  const [history, setHistory] = useState<HistoryItem[]>(mockHistory)
+  const [history, setHistory] = useState<IFactResult[]>([])
+  const router = useRouter()
 
-  const formatDate = (date: Date) => {
+  useEffect(() => {
+    const loadHistory = () => {
+      const storedFacts = getFactResults()
+      setHistory(storedFacts || [])
+    }
+    
+    loadHistory()
+  }, [])
+
+  const formatDate = (timestamp: string) => {
     return new Intl.DateTimeFormat("en-US", {
       month: "short",
       day: "numeric",
       hour: "numeric",
       minute: "numeric",
-    }).format(date)
+    }).format(new Date(timestamp))
   }
 
   const deleteItem = (id: string) => {
+    removeFactResultFromHistory(id)
     setHistory(history.filter((item) => item.id !== id))
   }
 
-  const clearHistory = () => {
+  const clearAllHistory = () => {
+    clearHistory()
     setHistory([])
   }
 
-  const getResultColor = (result: string) => {
-    switch (result) {
-      case "True":
+  const getResultColor = (result: string | null | undefined) => {
+    const resultStr = result?.toString().toLowerCase() || 'unverified'
+    switch (resultStr) {
+      case "true":
         return "text-green-500"
-      case "False":
+      case "false":
         return "text-red-500"
-      case "Misleading":
+      case "misleading":
         return "text-amber-500"
       default:
         return "text-gray-500"
     }
+  }
+
+  const viewFact = (item: IFactResult) => {
+    router.push(`/facts/${item.id}`)
   }
 
   return (
@@ -114,7 +99,7 @@ export function ConversationHistory() {
                   variant="ghost"
                   size="sm"
                   className="h-8 text-xs"
-                  onClick={clearHistory}
+                  onClick={clearAllHistory}
                 >
                   <Trash2 className="mr-1 h-3 w-3" />
                   Clear all
@@ -125,32 +110,28 @@ export function ConversationHistory() {
                 {history.map((item) => (
                   <div
                     key={item.id}
-                    className="flex flex-col space-y-2 rounded-md border p-3"
+                    className="flex flex-col space-y-2 rounded-md border p-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                    onClick={() => viewFact(item)}
                   >
-                    <div className="line-clamp-2 font-medium">{item.query}</div>
+                    <div className="line-clamp-2 font-medium">{item.claim}</div>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                         <Calendar className="h-3 w-3" />
-                        <span>{formatDate(item.date)}</span>
+                        <span>{formatDate(item.status?.timestamp || new Date().toISOString())}</span>
                       </div>
-                      <span className={`text-xs font-medium ${getResultColor(item.result)}`}>
-                        {item.result}
+                      <span className={`text-xs font-medium ${getResultColor(item.factCheck || 'unverified')}`}>
+                        {item.factCheck ? String(item.factCheck).toUpperCase() : "UNVERIFIED"}
                       </span>
                     </div>
                     <div className="flex justify-end gap-2">
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="h-7 text-xs"
-                        onClick={() => console.log("Load query", item.id)}
-                      >
-                        Load
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
                         className="h-7 text-xs text-destructive"
-                        onClick={() => deleteItem(item.id)}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          deleteItem(item.id || '')
+                        }}
                       >
                         <Trash2 className="mr-1 h-3 w-3" />
                         Delete

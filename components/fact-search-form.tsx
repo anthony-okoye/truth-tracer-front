@@ -2,28 +2,13 @@
 
 import { useState } from "react"
 import { Search } from "lucide-react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 
-// Define types for the result data
-export type VerificationStatus = "True" | "False" | "Misleading" | "Unverified"
-export type Source = {
-  title: string
-  url: string
-}
-export type FactResult = {
-  claim: string
-  verification: VerificationStatus
-  confidence: number
-  explanation: string
-  sources: Source[]
-}
 
-interface FactSearchFormProps {
-  onResultGenerated: (result: FactResult) => void
-}
-
-export function FactSearchForm({ onResultGenerated }: FactSearchFormProps) {
+export function FactSearchForm() {
+  const router = useRouter()
   const [query, setQuery] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
@@ -35,60 +20,11 @@ export function FactSearchForm({ onResultGenerated }: FactSearchFormProps) {
     setIsLoading(true)
     
     try {
-      // In a real app, this would be an API call to a fact-checking service
-      await new Promise(resolve => setTimeout(resolve, 1500))
-      
-      // Generate a mock result based on the query
-      const mockResult: FactResult = generateMockResult(query)
-      
-      // Pass the result up to the parent component
-      onResultGenerated(mockResult)
+      router.push(`/facts/result?query=${query}`)
     } catch (error) {
       console.error("Error fetching fact check:", error)
     } finally {
       setIsLoading(false)
-    }
-  }
-
-  // Function to generate mock results based on the query
-  const generateMockResult = (query: string): FactResult => {
-    // Very simple keyword matching for demo purposes
-    const lowerQuery = query.toLowerCase()
-    
-    if (lowerQuery.includes("earth") && lowerQuery.includes("flat")) {
-      return {
-        claim: query,
-        verification: "False",
-        confidence: 0.98,
-        explanation: "Scientific evidence consistently shows that the Earth is roughly spherical. This has been confirmed by satellite imagery, physics calculations, and direct observation.",
-        sources: [
-          { title: "NASA Earth Observatory", url: "https://earthobservatory.nasa.gov" },
-          { title: "National Geographic", url: "https://www.nationalgeographic.org" }
-        ]
-      }
-    } else if (lowerQuery.includes("coffee") && lowerQuery.includes("traded")) {
-      return {
-        claim: query,
-        verification: "Misleading",
-        confidence: 0.82,
-        explanation: "While coffee is a highly traded commodity, it is not the second most traded. Several commodities including natural gas, gold, and wheat have higher trade volumes.",
-        sources: [
-          { title: "International Coffee Organization", url: "https://www.ico.org" },
-          { title: "World Trade Organization", url: "https://www.wto.org" }
-        ]
-      }
-    } else {
-      // Default response for any other query
-      return {
-        claim: query,
-        verification: "Unverified",
-        confidence: 0.65,
-        explanation: "This claim requires more research. Based on preliminary analysis, there are conflicting sources and insufficient evidence to make a definitive determination.",
-        sources: [
-          { title: "Research Database", url: "https://example.org/research" },
-          { title: "Fact Check Archive", url: "https://example.org/factcheck" }
-        ]
-      }
     }
   }
 
