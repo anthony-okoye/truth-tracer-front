@@ -17,6 +17,7 @@ import { IFactResult } from "@/types"
 
 export function ConversationHistory() {
   const [history, setHistory] = useState<IFactResult[]>([])
+  const [isOpen, setIsOpen] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -63,10 +64,11 @@ export function ConversationHistory() {
 
   const viewFact = (item: IFactResult) => {
     router.push(`/facts/${item.id}`)
+    setIsOpen(false)
   }
 
   return (
-    <Sheet>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
         <Button variant="outline" size="icon" className="rounded-full">
           <HistoryIcon className="h-5 w-5" />
