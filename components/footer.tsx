@@ -13,7 +13,7 @@ export function Footer() {
             <Link href="/" className="flex items-center space-x-2">
               <span className="flex items-center font-bold text-xl">
                 <CheckCircle className="mr-2 h-5 w-5 text-primary" />
-                FactFinder
+                Truth Tracer
               </span>
             </Link>
             <p className="text-sm text-muted-foreground">
@@ -72,7 +72,7 @@ export function Footer() {
         {/* Copyright and powered by section */}
         <div className="mt-8 border-t border-border pt-6 flex flex-col sm:flex-row justify-between items-center">
           <p className="text-sm text-muted-foreground">
-            © {currentYear} FactFinder. All rights reserved.
+            © {currentYear} Truth Tracer. All rights reserved.
           </p>
           <div className="flex items-center mt-4 sm:mt-0">
             <p className="text-sm text-muted-foreground">

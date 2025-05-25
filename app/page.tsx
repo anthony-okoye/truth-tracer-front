@@ -18,7 +18,7 @@ export default function Home() {
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2 max-w-3xl mx-auto">
             <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
-              FactFinder
+              Truth Tracer
             </h1>
             <p className="text-lg text-muted-foreground md:text-xl">
               Verify information quickly and accurately with our advanced fact-checking tools

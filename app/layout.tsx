@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "FactFinder - Verify Information with Confidence",
+  title: "Truth Tracer - Verify Information with Confidence",
   description: "A modern fact-checking tool to help you verify information quickly and accurately",
 };
 

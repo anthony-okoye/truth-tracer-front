@@ -22,7 +22,7 @@ export function Header() {
             <Link href="/" className="flex items-center space-x-2">
               <span className="flex items-center font-bold text-xl">
                 <CheckCircle className="mr-2 h-5 w-5 text-primary" />
-                FactFinder
+                Truth Tracer
               </span>
             </Link>
           </div>
