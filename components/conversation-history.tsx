@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Calendar, Clock, HistoryIcon, Search, Trash2 } from "lucide-react"
+import { Calendar, HistoryIcon, Search, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   Sheet,

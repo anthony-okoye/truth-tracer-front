@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { CheckIcon, SearchIcon } from "lucide-react"
 import { FactSearchForm, FactResult } from "@/components/fact-search-form"
 import { FactResultCard } from "@/components/fact-result-card"
 
