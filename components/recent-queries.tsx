@@ -121,8 +121,8 @@ export function ConversationHistory() {
                         <Calendar className="h-3 w-3" />
                         <span>{formatDate(item.status?.timestamp || new Date().toISOString())}</span>
                       </div>
-                      <span className={`text-xs font-medium ${getResultColor(item.factCheck || 'unverified')}`}>
-                        {item.factCheck ? String(item.factCheck).toUpperCase() : "UNVERIFIED"}
+                      <span className={`text-xs font-medium ${getResultColor(item.factCheck?.verdict)}`}>
+                        {item.factCheck?.verdict ? String(item.factCheck.verdict).toUpperCase() : "UNVERIFIED"}
                       </span>
                     </div>
                     <div className="flex justify-end gap-2">

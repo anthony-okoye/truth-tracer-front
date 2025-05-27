@@ -86,6 +86,10 @@ export default function FactDetailPage() {
     }
   };
 
+  const isStatusFulfilled = (status?: string) => {
+    return status === 'fulfilled';
+  };
+
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
@@ -155,36 +159,82 @@ export default function FactDetailPage() {
         </div>
 
         {/* Main Fact Card */}
-        <Card>
-          <CardHeader>
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <CardTitle className="text-2xl font-bold mb-2">{factInfo?.claim || 'Unknown claim'}</CardTitle>
-                <div className="flex items-center gap-3">
-                  {getVerdictIcon(factInfo?.factCheck || null)}
-                  <Badge className={getVerdictColor(factInfo?.factCheck || null)}>
-                    {factInfo?.factCheck ? String(factInfo.factCheck).toUpperCase() : "UNVERIFIED"}
-                  </Badge>
-                  <span className="text-sm text-muted-foreground">
-                    Confidence: {Math.round((factInfo?.trustChain?.confidence || 0) * 100)}%
-                  </span>
+        {isStatusFulfilled(factInfo?.status?.factCheck) && factInfo?.factCheck && (
+          <Card>
+            <CardHeader>
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <CardTitle className="text-2xl font-bold mb-2">{factInfo?.claim || 'Unknown claim'}</CardTitle>
+                  <div className="flex items-center gap-3">
+                    {getVerdictIcon(factInfo?.factCheck?.verdict || null)}
+                    <Badge className={getVerdictColor(factInfo?.factCheck?.verdict || null)}>
+                      {factInfo?.factCheck?.verdict ? String(factInfo.factCheck.verdict).toUpperCase() : "UNVERIFIED"}
+                    </Badge>
+                    <span className="text-sm text-muted-foreground">
+                      Confidence: {Math.round((factInfo?.trustChain?.confidence || 0) * 100)}%
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <p className="text-lg mb-4">{factInfo?.trustChain?.explanation || 'No explanation available'}</p>
-            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-              <div className="flex items-center gap-1">
-                <Globe className="h-4 w-4" />
-                <span>Updated {factInfo?.status?.timestamp ? new Date(factInfo.status.timestamp).toLocaleDateString() : 'Unknown'}</span>
+            </CardHeader>
+            <CardContent>
+              <p className="text-lg mb-4">{factInfo?.factCheck?.explanation || 'No explanation available'}</p>
+              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                <div className="flex items-center gap-1">
+                  <Globe className="h-4 w-4" />
+                  <span>Updated {factInfo?.status?.timestamp ? new Date(factInfo.status.timestamp).toLocaleDateString() : 'Unknown'}</span>
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Fact Check Sources */}
+        {isStatusFulfilled(factInfo?.status?.factCheck) && factInfo?.factCheck?.sources && factInfo.factCheck.sources.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Globe className="h-5 w-5" />
+                Fact Check Sources ({factInfo.factCheck.sources.length})
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {factInfo.factCheck.sources.map((source, index) => (
+                  <div key={index} className="border rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">
+                          {source?.title || 'Unknown source'}
+                        </h4>
+                        <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+                          <div className="flex items-center gap-1">
+                            <User className="h-4 w-4" />
+                            Reliability: {source?.reliability || 'Unknown'}
+                          </div>
+                        </div>
+                      </div>
+                      {source?.url && (
+                        <a
+                          href={source.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline"
+                        >
+                          <ExternalLink className="h-4 w-4" />
+                          View
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Trust Chain Analysis */}
-        {factInfo?.trustChain && (
+        {isStatusFulfilled(factInfo?.status?.trustChain) && factInfo?.trustChain && (
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -221,7 +271,7 @@ export default function FactDetailPage() {
         )}
 
         {/* Socratic Analysis */}
-        {factInfo?.socratic && (
+        {isStatusFulfilled(factInfo?.status?.socratic) && factInfo?.socratic && (
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -296,52 +346,46 @@ export default function FactDetailPage() {
           </Card>
         )}
 
-        {/* Sources Card */}
-        {factInfo?.trustChain?.sources && (
+        {/* Trust Chain Sources */}
+        {isStatusFulfilled(factInfo?.status?.trustChain) && factInfo?.trustChain?.sources && factInfo.trustChain.sources.length > 0 && (
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Globe className="h-5 w-5" />
-                Sources ({factInfo.trustChain.sources.length})
+                Trust Chain Sources ({factInfo.trustChain.sources.length})
               </CardTitle>
             </CardHeader>
             <CardContent>
-              {factInfo.trustChain.sources.length > 0 ? (
-                <div className="space-y-4">
-                  {factInfo.trustChain.sources.map((source, index) => (
-                    <div key={index} className="border rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">
-                            {source?.name || 'Unknown source'}
-                          </h4>
-                          <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-                            <div className="flex items-center gap-1">
-                              <User className="h-4 w-4" />
-                              Reliability: {Math.round((source?.reliability || 0) * 100)}%
-                            </div>
+              <div className="space-y-4">
+                {factInfo.trustChain.sources.map((source, index) => (
+                  <div key={index} className="border rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">
+                          {source?.name || 'Unknown source'}
+                        </h4>
+                        <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+                          <div className="flex items-center gap-1">
+                            <User className="h-4 w-4" />
+                            Reliability: {Math.round((source?.reliability || 0) * 100)}%
                           </div>
                         </div>
-                        {source?.url && (
-                          <a
-                            href={source.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline"
-                          >
-                            <ExternalLink className="h-4 w-4" />
-                            View
-                          </a>
-                        )}
                       </div>
+                      {source?.url && (
+                        <a
+                          href={source.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline"
+                        >
+                          <ExternalLink className="h-4 w-4" />
+                          View
+                        </a>
+                      )}
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-gray-500 dark:text-gray-400 text-center py-4">
-                  No sources available for this fact check.
-                </p>
-              )}
+                  </div>
+                ))}
+              </div>
             </CardContent>
           </Card>
         )}

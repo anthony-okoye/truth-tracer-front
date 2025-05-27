@@ -7,7 +7,15 @@ export type TVerificationStatus =
 export interface IFactResult {
   id?: string;
   claim?: string;
-  factCheck?: string | null;
+  factCheck?: {
+    verdict?: string;
+    explanation?: string;
+    sources?: {
+      title?: string;
+      url?: string;
+      reliability?: string;
+    }[];
+  };
   trustChain?: {
     hasTrustChain?: boolean;
     confidence?: number;
