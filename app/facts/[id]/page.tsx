@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, XCircle, AlertCircle, ExternalLink, User, Globe, ArrowLeft, Brain, Link } from 'lucide-react';
+import { CheckCircle, XCircle, AlertCircle, ExternalLink, Globe, ArrowLeft, Brain, Link } from 'lucide-react';
 import { getFactResults } from '@/lib/utils';
 import { IFactResult } from '@/types';
 
@@ -160,25 +160,35 @@ export default function FactDetailPage() {
 
         {/* Main Fact Card */}
         {isStatusFulfilled(factInfo?.status?.factCheck) && factInfo?.factCheck && (
-          <Card>
-            <CardHeader>
+          <Card className="border-2 shadow-lg">
+            <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <CardTitle className="text-2xl font-bold mb-2">{factInfo?.claim || 'Unknown claim'}</CardTitle>
                   <div className="flex items-center gap-3">
                     {getVerdictIcon(factInfo?.factCheck?.verdict || null)}
-                    <Badge className={getVerdictColor(factInfo?.factCheck?.verdict || null)}>
+                    <Badge className={`${getVerdictColor(factInfo?.factCheck?.verdict || null)} px-3 py-1 text-sm font-semibold`}>
                       {factInfo?.factCheck?.verdict ? String(factInfo.factCheck.verdict).toUpperCase() : "UNVERIFIED"}
                     </Badge>
-                    <span className="text-sm text-muted-foreground">
-                      Confidence: {Math.round((factInfo?.trustChain?.confidence || 0) * 100)}%
-                    </span>
+                    {factInfo?.trustChain?.confidence !== undefined && (
+                      <div className="flex items-center gap-2">
+                        <div className="h-2 w-24 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 transition-all duration-1000"
+                            style={{ width: `${Math.round(factInfo.trustChain.confidence * 100)}%` }}
+                          />
+                        </div>
+                        <span className="text-sm text-muted-foreground font-medium">
+                          {Math.round(factInfo.trustChain.confidence * 100)}%
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
             </CardHeader>
-            <CardContent>
-              <p className="text-lg mb-4">{factInfo?.factCheck?.explanation || 'No explanation available'}</p>
+            <CardContent className="pt-6">
+              <p className="text-lg leading-relaxed mb-4">{factInfo?.factCheck?.explanation || 'No explanation available'}</p>
               <div className="flex items-center gap-4 text-sm text-muted-foreground">
                 <div className="flex items-center gap-1">
                   <Globe className="h-4 w-4" />
@@ -194,14 +204,14 @@ export default function FactDetailPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Globe className="h-5 w-5" />
+                <Globe className="h-5 w-5 text-blue-600" />
                 Fact Check Sources ({factInfo.factCheck.sources.length})
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {factInfo.factCheck.sources.map((source, index) => (
-                  <div key={index} className="border rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                  <div key={index} className="border rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-800 hover:shadow-md transition-all duration-200">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">
@@ -209,8 +219,12 @@ export default function FactDetailPage() {
                         </h4>
                         <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
                           <div className="flex items-center gap-1">
-                            <User className="h-4 w-4" />
-                            Reliability: {source?.reliability || 'Unknown'}
+                            <div className={`h-2 w-2 rounded-full ${
+                              source?.reliability === 'High' ? 'bg-green-500' : 
+                              source?.reliability === 'Medium' ? 'bg-yellow-500' : 
+                              'bg-gray-500'
+                            }`} />
+                            <span>Reliability: {source?.reliability || 'Unknown'}</span>
                           </div>
                         </div>
                       </div>
@@ -219,7 +233,7 @@ export default function FactDetailPage() {
                           href={source.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline"
+                          className="flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
                         >
                           <ExternalLink className="h-4 w-4" />
                           View
@@ -238,7 +252,7 @@ export default function FactDetailPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Link className="h-5 w-5" />
+                <Link className="h-5 w-5 text-indigo-600" />
                 Trust Chain Analysis
               </CardTitle>
             </CardHeader>
@@ -248,20 +262,29 @@ export default function FactDetailPage() {
               </p>
               
               {factInfo?.trustChain?.context && (
-                <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                  <h4 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">Context</h4>
-                  <p className="text-blue-800 dark:text-blue-200 text-sm">
+                <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                  <h4 className="font-semibold text-blue-900 dark:text-blue-100 mb-2 flex items-center gap-2">
+                    <div className="h-2 w-2 bg-blue-500 rounded-full" />
+                    Context
+                  </h4>
+                  <p className="text-blue-800 dark:text-blue-200 text-sm leading-relaxed">
                     {factInfo.trustChain.context}
                   </p>
                 </div>
               )}
               
               {factInfo?.trustChain?.gaps && factInfo.trustChain.gaps.length > 0 && (
-                <div className="mt-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
-                  <h4 className="font-semibold text-yellow-900 dark:text-yellow-100 mb-2">Information Gaps</h4>
+                <div className="mt-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                  <h4 className="font-semibold text-yellow-900 dark:text-yellow-100 mb-2 flex items-center gap-2">
+                    <AlertCircle className="h-4 w-4" />
+                    Information Gaps
+                  </h4>
                   <ul className="text-yellow-800 dark:text-yellow-200 text-sm space-y-1">
                     {factInfo.trustChain.gaps.map((gap, index) => (
-                      <li key={index}>• {gap}</li>
+                      <li key={index} className="flex items-start gap-2">
+                        <span className="text-yellow-600 mt-0.5">•</span>
+                        <span>{gap}</span>
+                      </li>
                     ))}
                   </ul>
                 </div>
@@ -275,38 +298,41 @@ export default function FactDetailPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Brain className="h-5 w-5" />
+                <Brain className="h-5 w-5 text-purple-600" />
                 Socratic Analysis
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
                 {factInfo?.socratic?.reasoningSteps && factInfo.socratic.reasoningSteps.length > 0 && factInfo.socratic.reasoningSteps.map((step, index) => (
-                  <div key={index} className="border-l-4 border-blue-200 pl-4">
-                    <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                  <div key={index} className="border-l-4 border-purple-200 dark:border-purple-800 pl-4 hover:border-purple-300 dark:hover:border-purple-700 transition-colors">
+                    <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2 text-lg">
                       {step?.question || 'No question available'}
                     </h4>
                     <div className="space-y-3 text-sm">
-                      <div>
+                      <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded-md">
                         <span className="font-medium text-gray-700 dark:text-gray-300">Analysis: </span>
                         <span className="text-gray-600 dark:text-gray-400">{step?.analysis || 'No analysis available'}</span>
                       </div>
-                      <div>
-                        <span className="font-medium text-gray-700 dark:text-gray-300">Evidence: </span>
-                        <span className="text-gray-600 dark:text-gray-400">{step?.evidence || 'No evidence available'}</span>
+                      <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-md">
+                        <span className="font-medium text-blue-700 dark:text-blue-300">Evidence: </span>
+                        <span className="text-blue-600 dark:text-blue-400">{step?.evidence || 'No evidence available'}</span>
                       </div>
-                      <div>
-                        <span className="font-medium text-gray-700 dark:text-gray-300">Implications: </span>
-                        <span className="text-gray-600 dark:text-gray-400">{step?.implications || 'No implications available'}</span>
+                      <div className="bg-purple-50 dark:bg-purple-900/20 p-3 rounded-md">
+                        <span className="font-medium text-purple-700 dark:text-purple-300">Implications: </span>
+                        <span className="text-purple-600 dark:text-purple-400">{step?.implications || 'No implications available'}</span>
                       </div>
                     </div>
                   </div>
                 ))}
                 
                 {factInfo?.socratic?.conclusion && (
-                  <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                    <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-3">Conclusion</h4>
-                    <div className="space-y-2 text-sm">
+                  <div className="mt-6 p-4 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-lg border border-gray-200 dark:border-gray-700">
+                    <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-3 text-lg flex items-center gap-2">
+                      <div className="h-2 w-2 bg-purple-500 rounded-full" />
+                      Conclusion
+                    </h4>
+                    <div className="space-y-3 text-sm">
                       <div>
                         <span className="font-medium text-gray-700 dark:text-gray-300">Logical Validity: </span>
                         <span className="text-gray-600 dark:text-gray-400">{factInfo?.socratic?.conclusion?.logicalValidity || 'No validity assessment available'}</span>
@@ -314,10 +340,13 @@ export default function FactDetailPage() {
                       
                       {factInfo?.socratic?.conclusion?.keyFlaws && Array.isArray(factInfo.socratic.conclusion.keyFlaws) && factInfo.socratic.conclusion.keyFlaws.length > 0 && (
                         <div>
-                          <span className="font-medium text-gray-700 dark:text-gray-300">Key Flaws: </span>
-                          <ul className="text-gray-600 dark:text-gray-400 mt-1">
+                          <span className="font-medium text-red-700 dark:text-red-300">Key Flaws: </span>
+                          <ul className="text-red-600 dark:text-red-400 mt-1 space-y-1">
                             {factInfo.socratic.conclusion.keyFlaws.map((flaw, index) => (
-                              <li key={index}>• {flaw}</li>
+                              <li key={index} className="flex items-start gap-2">
+                                <XCircle className="h-3 w-3 mt-0.5 flex-shrink-0" />
+                                <span>{flaw}</span>
+                              </li>
                             ))}
                           </ul>
                         </div>
@@ -325,18 +354,21 @@ export default function FactDetailPage() {
                       
                       {factInfo?.socratic?.conclusion?.strengths && Array.isArray(factInfo.socratic.conclusion.strengths) && factInfo.socratic.conclusion.strengths.length > 0 && (
                         <div>
-                          <span className="font-medium text-gray-700 dark:text-gray-300">Strengths: </span>
-                          <ul className="text-gray-600 dark:text-gray-400 mt-1">
+                          <span className="font-medium text-green-700 dark:text-green-300">Strengths: </span>
+                          <ul className="text-green-600 dark:text-green-400 mt-1 space-y-1">
                             {factInfo.socratic.conclusion.strengths.map((strength, index) => (
-                              <li key={index}>• {strength}</li>
+                              <li key={index} className="flex items-start gap-2">
+                                <CheckCircle className="h-3 w-3 mt-0.5 flex-shrink-0" />
+                                <span>{strength}</span>
+                              </li>
                             ))}
                           </ul>
                         </div>
                       )}
                       
-                      <div>
-                        <span className="font-medium text-gray-700 dark:text-gray-300">Recommendations: </span>
-                        <span className="text-gray-600 dark:text-gray-400">{factInfo?.socratic?.conclusion?.recommendations || 'No recommendations available'}</span>
+                      <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-md">
+                        <span className="font-medium text-blue-700 dark:text-blue-300">Recommendations: </span>
+                        <span className="text-blue-600 dark:text-blue-400">{factInfo?.socratic?.conclusion?.recommendations || 'No recommendations available'}</span>
                       </div>
                     </div>
                   </div>
@@ -351,23 +383,28 @@ export default function FactDetailPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Globe className="h-5 w-5" />
+                <Globe className="h-5 w-5 text-indigo-600" />
                 Trust Chain Sources ({factInfo.trustChain.sources.length})
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {factInfo.trustChain.sources.map((source, index) => (
-                  <div key={index} className="border rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                  <div key={index} className="border rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-800 hover:shadow-md transition-all duration-200">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">
                           {source?.name || 'Unknown source'}
                         </h4>
                         <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-                          <div className="flex items-center gap-1">
-                            <User className="h-4 w-4" />
-                            Reliability: {Math.round((source?.reliability || 0) * 100)}%
+                          <div className="flex items-center gap-2">
+                            <div className="h-2 w-20 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                              <div 
+                                className="h-full bg-gradient-to-r from-green-500 to-emerald-500 transition-all duration-1000"
+                                style={{ width: `${Math.round((source?.reliability || 0) * 100)}%` }}
+                              />
+                            </div>
+                            <span className="font-medium">{Math.round((source?.reliability || 0) * 100)}%</span>
                           </div>
                         </div>
                       </div>
@@ -376,7 +413,7 @@ export default function FactDetailPage() {
                           href={source.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline"
+                          className="flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
                         >
                           <ExternalLink className="h-4 w-4" />
                           View
@@ -398,17 +435,35 @@ export default function FactDetailPage() {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                <div className="text-center p-4 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-lg border border-gray-200 dark:border-gray-700">
                   <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">Fact Check</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">{factInfo?.status?.factCheck || 'Unknown'}</p>
+                  <p className={`text-sm font-medium ${
+                    factInfo?.status?.factCheck === 'fulfilled' ? 'text-green-600' : 'text-gray-600'
+                  } dark:${
+                    factInfo?.status?.factCheck === 'fulfilled' ? 'text-green-400' : 'text-gray-400'
+                  }`}>
+                    {factInfo?.status?.factCheck || 'Unknown'}
+                  </p>
                 </div>
-                <div className="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                <div className="text-center p-4 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-lg border border-gray-200 dark:border-gray-700">
                   <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">Trust Chain</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">{factInfo?.status?.trustChain || 'Unknown'}</p>
+                  <p className={`text-sm font-medium ${
+                    factInfo?.status?.trustChain === 'fulfilled' ? 'text-green-600' : 'text-gray-600'
+                  } dark:${
+                    factInfo?.status?.trustChain === 'fulfilled' ? 'text-green-400' : 'text-gray-400'
+                  }`}>
+                    {factInfo?.status?.trustChain || 'Unknown'}
+                  </p>
                 </div>
-                <div className="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                <div className="text-center p-4 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-lg border border-gray-200 dark:border-gray-700">
                   <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">Socratic Analysis</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">{factInfo?.status?.socratic || 'Unknown'}</p>
+                  <p className={`text-sm font-medium ${
+                    factInfo?.status?.socratic === 'fulfilled' ? 'text-green-600' : 'text-gray-600'
+                  } dark:${
+                    factInfo?.status?.socratic === 'fulfilled' ? 'text-green-400' : 'text-gray-400'
+                  }`}>
+                    {factInfo?.status?.socratic || 'Unknown'}
+                  </p>
                 </div>
               </div>
             </CardContent>

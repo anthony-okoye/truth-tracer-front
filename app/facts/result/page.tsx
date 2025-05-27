@@ -13,7 +13,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { CheckCircle, XCircle, AlertCircle, ExternalLink, User, Globe, ArrowLeft, Save, Search, Loader2, Brain, Link } from 'lucide-react';
+import { CheckCircle, XCircle, AlertCircle, ExternalLink, Globe, ArrowLeft, Save, Search, Loader2, Brain, Link } from 'lucide-react';
 import { storeFactResult } from '@/lib/utils';
 
 function FactResultContent() {
