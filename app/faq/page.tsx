@@ -1,6 +1,6 @@
 "use client"
 
-import { cn } from "@/lib/utils";
+
 import { HelpCircle, Mail, MessageCircle, Book, Shield, Clock, Users, Zap } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
@@ -71,7 +71,7 @@ export default function FAQPage() {
               <span className="gradient-text">Frequently Asked Questions</span>
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Everything you need to know about Truth Tracer's AI-powered fact verification system
+              Everything you need to know about Truth Tracer&apos;s AI-powered fact verification system
             </p>
           </div>
         </div>
@@ -101,7 +101,7 @@ export default function FAQPage() {
               <div className="text-2xl font-bold text-gray-900 dark:text-white">500K+</div>
               <div className="text-sm text-gray-600 dark:text-gray-400">Active Users</div>
             </Card>
-          </div>
+      </div>
         </div>
       </section>
 
@@ -146,10 +146,10 @@ export default function FAQPage() {
                     Still have questions?
                   </h3>
                   <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-                    Can't find the answer you're looking for? Our support team is here to help you get the most out of Truth Tracer's verification capabilities.
-                  </p>
-                </div>
-                
+                    Can&apos;t find the answer you&apos;re looking for? Our support team is here to help you get the most out of Truth Tracer&apos;s verification capabilities.
+          </p>
+        </div>
+
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
                     <Mail className="h-4 w-4 mr-2" />
@@ -167,23 +167,23 @@ export default function FAQPage() {
                     <h4 className="font-semibold text-gray-900 dark:text-white">Fast Response</h4>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
                       We typically respond within 24 hours
-                    </p>
-                  </div>
+          </p>
+        </div>
                   <div className="text-center space-y-2">
                     <Shield className="h-6 w-6 mx-auto text-green-600" />
                     <h4 className="font-semibold text-gray-900 dark:text-white">Expert Help</h4>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
                       Our team includes fact-checking experts
-                    </p>
-                  </div>
+          </p>
+        </div>
                   <div className="text-center space-y-2">
                     <Users className="h-6 w-6 mx-auto text-purple-600" />
                     <h4 className="font-semibold text-gray-900 dark:text-white">Community</h4>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
                       Join thousands of truth seekers
-                    </p>
-                  </div>
-                </div>
+          </p>
+        </div>
+      </div>
               </div>
             </CardContent>
           </Card>

@@ -1,13 +1,11 @@
 "use client"
 
-import { cn } from "@/lib/utils";
 import {
   Brain,
   Target,
   Network,
   Lightbulb,
   ShieldCheck,
-  SearchCheck,
   Zap,
   Globe,
   Users,
@@ -18,7 +16,7 @@ import {
   Clock,
   Star
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 export default function AboutPage() {
@@ -119,7 +117,7 @@ export default function AboutPage() {
                 <span className="text-gradient-purple">Our Mission</span>
               </h2>
               <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                In today's fast-paced digital world, misinformation can spread at unprecedented speeds. Truth Tracer stands as a beacon of accuracy and reliability, empowering individuals and organizations to make informed decisions based on verified facts. We're committed to democratizing access to truth verification tools while maintaining the highest standards of accuracy and transparency.
+                In today&apos;s fast-paced digital world, misinformation can spread at unprecedented speeds. Truth Tracer stands as a beacon of accuracy and reliability, empowering individuals and organizations to make informed decisions based on verified facts. We&apos;re committed to democratizing access to truth verification tools while maintaining the highest standards of accuracy and transparency.
               </p>
             </CardContent>
           </Card>
@@ -207,7 +205,7 @@ export default function AboutPage() {
               <span className="text-gradient-blue">Impact &</span> Statistics
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Our numbers speak for themselves - see the impact we're making in the fight against misinformation
+              Our numbers speak for themselves - see the impact we&apos;re making in the fight against misinformation
             </p>
           </div>
           
@@ -286,7 +284,7 @@ export default function AboutPage() {
                 <span className="text-gradient-blue">Looking Forward</span>
               </h2>
               <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-8">
-                As we continue to evolve, we're constantly improving our algorithms, expanding our source networks, and developing new features to make fact-checking more accessible and efficient. Our vision is to create a world where verified information is the norm, not the exception.
+                As we continue to evolve, we&apos;re constantly improving our algorithms, expanding our source networks, and developing new features to make fact-checking more accessible and efficient. Our vision is to create a world where verified information is the norm, not the exception.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
                 <div className="text-center">

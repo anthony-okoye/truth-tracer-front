@@ -35,7 +35,7 @@ export function FactSearchForm() {
           What would you like to <span className="text-gradient-blue">verify</span>?
         </h2>
         <p className="text-gray-600 dark:text-gray-300">
-          Enter any claim, statement, or fact you'd like our AI to analyze
+          Enter any claim, statement, or fact you&apos;d like our AI to analyze
         </p>
       </div>
       
