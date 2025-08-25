@@ -107,28 +107,69 @@ function FactResultContent() {
 
   if (loading) {
     return (
-      <div className="w-full mx-auto px-4 py-8">
-        <div className="mx-auto">
+      <div className="mx-auto max-w-6xl min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-900 dark:to-blue-950">
+        <div className="container mx-auto px-4 py-8">
           <Button 
             variant="outline" 
             onClick={() => router.push('/')}
-            className="mb-6"
+            className="mb-8 glass-effect hover-lift"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Search
           </Button>
           
-          <div className="flex items-center justify-center py-12">
-            <div className="text-center space-y-4">
-              <Loader2 className="h-16 w-16 animate-spin mx-auto text-primary" />
-              <h2 className="text-2xl font-semibold mb-2">Analyzing your claim...</h2>
-              <p className="text-muted-foreground mb-4">
-                We&apos;re checking multiple sources to verify: &quot;{query}&quot;
-              </p>
-              <div className="flex justify-center space-x-2">
-                <div className="h-2 w-2 bg-primary rounded-full animate-bounce"></div>
-                <div className="h-2 w-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                <div className="h-2 w-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+          <div className="flex items-center justify-center py-20">
+            <div className="text-center space-y-6 max-w-2xl">
+              {/* Animated logo */}
+              <div className="relative">
+                <div className="w-24 h-24 mx-auto rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center animate-pulse-slow">
+                  <Brain className="h-12 w-12 text-white animate-float" />
+                </div>
+                <div className="absolute inset-0 w-24 h-24 mx-auto rounded-full border-4 border-blue-300 animate-ping"></div>
+              </div>
+              
+              <div className="space-y-4">
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+                  <span className="text-gradient-blue">Analyzing</span> your claim...
+                </h2>
+                <div className="glass-effect rounded-xl p-6 text-left">
+                  <p className="text-gray-700 dark:text-gray-300 italic">
+                    &quot;{query}&quot;
+                  </p>
+                </div>
+                <p className="text-gray-600 dark:text-gray-400 max-w-md mx-auto">
+                  Our AI is examining multiple sources, checking facts, and building a comprehensive analysis
+                </p>
+              </div>
+              
+              {/* Progress indicators */}
+              <div className="space-y-4">
+                <div className="flex justify-center space-x-8">
+                  <div className="flex flex-col items-center space-y-2">
+                    <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
+                      <Search className="h-6 w-6 text-blue-600 dark:text-blue-400 animate-pulse" />
+                    </div>
+                    <span className="text-xs text-gray-500">Fact Check</span>
+                  </div>
+                  <div className="flex flex-col items-center space-y-2">
+                    <div className="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
+                      <Link className="h-6 w-6 text-purple-600 dark:text-purple-400 animate-pulse" style={{animationDelay: '0.5s'}} />
+                    </div>
+                    <span className="text-xs text-gray-500">Trust Chain</span>
+                  </div>
+                  <div className="flex flex-col items-center space-y-2">
+                    <div className="w-12 h-12 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center">
+                      <Brain className="h-6 w-6 text-indigo-600 dark:text-indigo-400 animate-pulse" style={{animationDelay: '1s'}} />
+                    </div>
+                    <span className="text-xs text-gray-500">Socratic Analysis</span>
+                  </div>
+                </div>
+                
+                <div className="flex justify-center space-x-2">
+                  <div className="h-2 w-2 bg-blue-500 rounded-full animate-bounce"></div>
+                  <div className="h-2 w-2 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                  <div className="h-2 w-2 bg-indigo-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                </div>
               </div>
             </div>
           </div>
@@ -218,57 +259,66 @@ function FactResultContent() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-6xl mx-auto space-y-6">
-        <div className="flex items-center justify-between mb-6">
-          <Button 
-            variant="outline" 
-            onClick={() => router.push('/')}
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Search
-          </Button>
-          
-          <div className="flex gap-2">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-900 dark:to-blue-950">
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-6xl mx-auto space-y-8">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
             <Button 
-              onClick={handleSaveFact}
-              disabled={saving}
-              className="bg-blue-600 hover:bg-blue-700"
+              variant="outline" 
+              onClick={() => router.push('/')}
+              className="glass-effect hover-lift"
             >
-              <Save className="h-4 w-4 mr-2" />
-              {saving ? 'Saving...' : 'Save Fact'}
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Search
             </Button>
-            <Button 
-              variant="outline"
-              onClick={handleNewSearch}
-            >
-              <Search className="h-4 w-4 mr-2" />
-              New Search
-            </Button>
+            
+            <div className="flex flex-wrap gap-3">
+              <Button 
+                onClick={handleSaveFact}
+                disabled={saving}
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 disabled:transform-none"
+              >
+                <Save className="h-4 w-4 mr-2" />
+                {saving ? 'Saving...' : 'Save Analysis'}
+              </Button>
+              <Button 
+                variant="outline"
+                onClick={handleNewSearch}
+                className="glass-effect hover-lift"
+              >
+                <Search className="h-4 w-4 mr-2" />
+                New Search
+              </Button>
+            </div>
           </div>
-        </div>
 
         {/* Main Fact Card */}
         {isStatusFulfilled(factInfo?.status?.factCheck) && factInfo?.factCheck && (
-          <Card className="border-2 shadow-lg">
-            <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950">
+          <Card className="glass-effect border-2 border-white/20 dark:border-gray-700/20 shadow-2xl card-hover overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-indigo-500/5"></div>
+            <CardHeader className="relative bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-blue-950/50 dark:to-indigo-950/50 backdrop-blur-sm">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <CardTitle className="text-2xl font-bold mb-2">{factInfo?.claim || query}</CardTitle>
-                  <div className="flex items-center gap-3">
-                    {getVerdictIcon(factInfo?.factCheck?.verdict || null)}
-                    <Badge className={`${getVerdictColor(factInfo?.factCheck?.verdict || null)} px-3 py-1 text-sm font-semibold`}>
-                      {factInfo?.factCheck?.verdict ? String(factInfo.factCheck.verdict).toUpperCase() : "UNVERIFIED"}
-                    </Badge>
+                  <CardTitle className="text-2xl md:text-3xl font-bold mb-4 text-gray-900 dark:text-white leading-tight">
+                    {factInfo?.claim || query}
+                  </CardTitle>
+                  <div className="flex flex-wrap items-center gap-4">
+                    <div className="flex items-center gap-3">
+                      {getVerdictIcon(factInfo?.factCheck?.verdict || null)}
+                      <Badge className={`${getVerdictColor(factInfo?.factCheck?.verdict || null)} px-4 py-2 text-sm font-bold rounded-full shadow-md`}>
+                        {factInfo?.factCheck?.verdict ? String(factInfo.factCheck.verdict).toUpperCase() : "UNVERIFIED"}
+                      </Badge>
+                    </div>
                     {factInfo?.trustChain?.confidence !== undefined && (
-                      <div className="flex items-center gap-2">
-                        <div className="h-2 w-24 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                      <div className="flex items-center gap-3 bg-white/70 dark:bg-gray-800/70 rounded-full px-4 py-2 backdrop-blur-sm">
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Confidence</span>
+                        <div className="h-2 w-32 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                           <div 
-                            className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 transition-all duration-1000"
+                            className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-1000 shadow-inner"
                             style={{ width: `${Math.round(factInfo.trustChain.confidence * 100)}%` }}
                           />
                         </div>
-                        <span className="text-sm text-muted-foreground font-medium">
+                        <span className="text-sm font-bold text-gray-900 dark:text-white">
                           {Math.round(factInfo.trustChain.confidence * 100)}%
                         </span>
                       </div>
@@ -277,12 +327,20 @@ function FactResultContent() {
                 </div>
               </div>
             </CardHeader>
-            <CardContent className="pt-6">
-              <p className="text-lg leading-relaxed mb-4">{factInfo?.factCheck?.explanation || 'No explanation available'}</p>
-              <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                <div className="flex items-center gap-1">
+            <CardContent className="relative pt-8 pb-6">
+              <div className="prose prose-lg dark:prose-invert max-w-none">
+                <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-300 mb-6">
+                  {factInfo?.factCheck?.explanation || 'No explanation available'}
+                </p>
+              </div>
+              <div className="flex items-center gap-6 text-sm text-gray-500 dark:text-gray-400 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <div className="flex items-center gap-2">
                   <Globe className="h-4 w-4" />
                   <span>Updated {factInfo?.status?.timestamp ? new Date(factInfo.status.timestamp).toLocaleDateString() : 'Unknown'}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Brain className="h-4 w-4" />
+                  <span>AI-Powered Analysis</span>
                 </div>
               </div>
             </CardContent>
@@ -291,33 +349,38 @@ function FactResultContent() {
 
         {/* Fact Check Sources */}
         {isStatusFulfilled(factInfo?.status?.factCheck) && factInfo?.factCheck?.sources && factInfo.factCheck.sources.length > 0 && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Globe className="h-5 w-5 text-blue-600" />
-                Fact Check Sources ({factInfo.factCheck.sources.length})
+          <Card className="glass-effect card-hover border-2 border-white/20 dark:border-gray-700/20 shadow-xl">
+            <CardHeader className="bg-gradient-to-r from-blue-50/50 to-cyan-50/50 dark:from-blue-950/30 dark:to-cyan-950/30">
+              <CardTitle className="flex items-center gap-3 text-xl font-bold">
+                <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
+                  <Globe className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                </div>
+                <span className="text-gradient-blue">Fact Check Sources</span>
+                <Badge variant="secondary" className="text-xs">{factInfo.factCheck.sources.length}</Badge>
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
+            <CardContent className="pt-6">
+              <div className="grid gap-4 md:gap-6">
                 {factInfo.factCheck.sources.map((source, index) => (
                   <div
                     key={index}
-                    className="border rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-800 hover:shadow-md transition-all duration-200"
+                    className="group border-2 border-gray-200 dark:border-gray-700 rounded-xl p-6 hover:border-blue-300 dark:hover:border-blue-600 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm hover:shadow-lg transition-all duration-300"
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">
+                        <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-3 text-lg group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                           {source?.title || 'Unknown source'}
                         </h4>
-                        <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-                          <div className="flex items-center gap-1">
-                            <div className={`h-2 w-2 rounded-full ${
+                        <div className="flex items-center gap-4 text-sm">
+                          <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800">
+                            <div className={`h-3 w-3 rounded-full shadow-inner ${
                               source?.reliability === 'High' ? 'bg-green-500' : 
                               source?.reliability === 'Medium' ? 'bg-yellow-500' : 
                               'bg-gray-500'
                             }`} />
-                            <span>Reliability: {source?.reliability || 'Unknown'}</span>
+                            <span className="font-medium text-gray-700 dark:text-gray-300">
+                              {source?.reliability || 'Unknown'} Reliability
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -326,10 +389,10 @@ function FactResultContent() {
                           href={source.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+                          className="flex items-center gap-2 px-4 py-2 bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 text-blue-600 dark:text-blue-400 rounded-lg font-medium transition-all duration-200 hover:scale-105"
                         >
                           <ExternalLink className="h-4 w-4" />
-                          View
+                          View Source
                         </a>
                       )}
                     </div>
@@ -568,6 +631,7 @@ function FactResultContent() {
             </CardContent>
           </Card>
         )}
+        </div>
       </div>
     </div>
   );
